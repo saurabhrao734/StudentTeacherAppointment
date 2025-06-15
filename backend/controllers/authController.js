@@ -21,16 +21,20 @@ exports.signToken = signToken;
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
+  console.log(email,password);
+
   if (!email || !password) {
     return next(new AppError('Cannot leave email or password field blank'));
   }
 
   const user = await User.findOne({ email });
+  console.log("User found:", user);
 
   if (!user) {
     return next(new AppError('User not found'));
   }
 
+  
   const isPasswordValid = await verifyPassword(password, user.password);
 
   if (!isPasswordValid) {
